@@ -18,10 +18,10 @@ The Stack comes with:
 - an auto-scaling group of instances to run your services
 - a multi-az VPC with different subnets for availability
 - self-managed services run via docker and ECS
-- an ELB and ECS definition for each service
+- an ALB and ECS definition for each service
 - docker logs that populate in CloudWatch
 - a bastion node for manual SSH access
-- automatic ELB logging to S3
+- automatic ALB logging to S3
 
 Start from scratch or selectively add it to your existing infrastructure, the Stack is yours to customize and tweak.
 
@@ -103,7 +103,7 @@ At a high level, the Stack creates a multi-az VPC, a single auto-scaling cluster
 
 ![](./images/stack.png)
 
-Your instances are automatically distributed across the VPC, addresses are translated by NAT gateways, and services are all discoverable via route53 and ELBs.
+Your instances are automatically distributed across the VPC, addresses are translated by NAT gateways, and services are all discoverable via route53 and ALBs.
 
 We'll walk through how each of these fit together in this architecture document.
 
