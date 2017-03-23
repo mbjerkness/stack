@@ -43,6 +43,10 @@ variable "security_groups" {
   description = "Comma separated list of security group IDs that will be passed to the ALB module"
 }
 
+variable "port" {
+  description = "The container host port"
+}
+
 variable "cluster" {
   description = "The cluster name or ARN"
 }
@@ -175,6 +179,7 @@ module "task" {
   memory            = "${var.memory}"
   cpu               = "${var.cpu}"
   //working_directory = "${var.working_directory}"
+
 
   /* If your task's container definition specifies port 80 for an NGINX container port,
      and port 0 for the host port, then the host port is dynamically chosen from the
