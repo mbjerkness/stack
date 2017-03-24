@@ -43,10 +43,6 @@ variable "security_groups" {
   description = "Comma separated list of security group IDs that will be passed to the ALB module"
 }
 
-variable "port" {
-  description = "The container host port"
-}
-
 variable "cluster" {
   description = "The cluster name or ARN"
 }
