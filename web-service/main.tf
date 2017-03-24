@@ -43,10 +43,6 @@ variable "security_groups" {
   description = "Comma separated list of security group IDs that will be passed to the ALB module"
 }
 
-variable "port" {
-  description = "The container host port"
-}
-
 variable "cluster" {
   description = "The cluster name or ARN"
 }
@@ -93,6 +89,11 @@ variable "healthcheck" {
 variable "container_port" {
   description = "The container port"
   default     = 3000
+}
+
+variable "host_port" {
+  description = "The host port"
+  default = 0
 }
 
 variable "command" {
@@ -175,11 +176,16 @@ module "task" {
   cpu               = "${var.cpu}"
   //working_directory = "${var.working_directory}"
 
+  /* If your task's container definition specifies port 80 for an NGINX container port,
+     and port 0 for the host port, then the host port is dynamically chosen from the
+     ephemeral port range of the container instance
+     (such as 32768 to 61000 on the latest Amazon ECS-optimized AMI).
+  */
   ports = <<EOF
   [
     {
       "containerPort": ${var.container_port},
-      "hostPort": ${var.port}
+      "hostPort": ${var.host_port}
     }
   ]
 EOF
@@ -189,7 +195,7 @@ module "alb" {
   source = "./alb"
 
   name               = "${module.task.name}"
-  port               = "${var.port}"
+  port               = "${var.container_port}"
   environment        = "${var.environment}"
   subnet_ids         = "${var.subnet_ids}"
   external_dns_name  = "${coalesce(var.external_dns_name, module.task.name)}"
