@@ -136,7 +136,7 @@ variable "deployment_maximum_percent" {
   default     = 200
 }
 
-variable vpc_id {
+variable "vpc_id" {
   description = "The id of the VPC."
 }
 
