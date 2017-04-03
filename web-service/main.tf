@@ -180,6 +180,7 @@ module "task" {
   memory            = "${var.memory}"
   cpu               = "${var.cpu}"
 
+
   /* If your task's container definition specifies port 80 for an NGINX container port,
      and port 0 for the host port, then the host port is dynamically chosen from the
      ephemeral port range of the container instance
