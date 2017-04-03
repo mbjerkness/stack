@@ -97,6 +97,15 @@ variable "subnet_ids" {
   type        = "list"
 }
 
+variable "skip_final_snapshot" {
+  description = "If true, when destroying the RDS instance it will skip the final snapshot"
+  default     = false
+}
+
+variable "environment" {
+  description = "The environment tag, e.g prod"
+}
+
 resource "aws_security_group" "main" {
   name        = "${var.name}-rds"
   description = "Allows traffic to RDS from other security groups"
@@ -125,6 +134,7 @@ resource "aws_security_group" "main" {
 
   tags {
     Name = "RDS (${var.name})"
+    Environment = "${var.environment}"
   }
 }
 
@@ -161,6 +171,12 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name   = "${aws_db_subnet_group.main.id}"
   vpc_security_group_ids = ["${aws_security_group.main.id}"]
   publicly_accessible    = "${var.publicly_accessible}"
+  skip_final_snapshot = "${var.skip_final_snapshot}"
+
+  tags {
+    Name        = "${var.name}"
+    Environment = "${var.environment}"
+  }
 }
 
 output "addr" {
@@ -169,4 +185,17 @@ output "addr" {
 
 output "url" {
   value = "${aws_db_instance.main.engine}://${aws_db_instance.main.username}:${aws_db_instance.main.password}@${aws_db_instance.main.endpoint}/${aws_db_instance.main.name}"
+}
+
+output "endpoint" {
+  # The endpoint has the port, so we need to split the string and take the first element
+  value = "${element(split(":", aws_db_instance.main.endpoint), 0)}"
+}
+
+output "username" {
+  value = "${aws_db_instance.main.username}"
+}
+
+output "password" {
+  value = "${aws_db_instance.main.password}"
 }

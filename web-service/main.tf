@@ -96,6 +96,11 @@ variable "host_port" {
   default = 0
 }
 
+variable "entry_point" {
+  description = "The docker container entry point"
+  default     = "[]"
+}
+
 variable "command" {
   description = "The raw json of the task command"
   default     = "[]"
@@ -174,7 +179,6 @@ module "task" {
   env_vars          = "${var.env_vars}"
   memory            = "${var.memory}"
   cpu               = "${var.cpu}"
-  //working_directory = "${var.working_directory}"
 
 
   /* If your task's container definition specifies port 80 for an NGINX container port,
