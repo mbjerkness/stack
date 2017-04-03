@@ -192,6 +192,10 @@ output "endpoint" {
   value = "${element(split(":", aws_db_instance.main.endpoint), 0)}"
 }
 
+output "port" {
+  value = "${aws_db_instance.main.port}"
+}
+
 output "username" {
   value = "${aws_db_instance.main.username}"
 }
