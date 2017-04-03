@@ -88,7 +88,6 @@ resource "aws_alb_target_group" "main" {
   depends_on = ["aws_alb.main"]
 }
 
-/*
 resource "aws_alb_listener" "service_https" {
   load_balancer_arn = "${aws_alb.main.arn}"
   port              = "443"
@@ -103,7 +102,6 @@ resource "aws_alb_listener" "service_https" {
 
   depends_on = ["aws_alb.main"]
 }
-*/
 
 resource "aws_alb_listener" "service_http" {
   load_balancer_arn = "${aws_alb.main.arn}"
