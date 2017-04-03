@@ -22,6 +22,9 @@ variable "cidr" {
   description = "The CIDR block to provision for the VPC"
 }
 
+# Want to use new ones...but alas.
+# Need to figure out how to build a new AMI with the updated ECS agent with packer
+# Could also figure out how to use the Amazon ECS Optimized AMI, but need to figure out logging...
 variable "default_ecs_ami" {
   default = {
     us-east-1      = "ami-dde4e6ca"

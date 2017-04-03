@@ -17,6 +17,10 @@ variable "port" {
   default     = 5432
 }
 
+variable "username" {
+  description = "Postgres username"
+}
+
 variable "password" {
   description = "Postgres user password"
 }
@@ -87,6 +91,15 @@ variable "subnet_ids" {
   type        = "list"
 }
 
+variable "skip_final_snapshot" {
+  description = "If true, when destroying the RDS instance it will skip the final snapshot"
+  default     = false
+}
+
+variable "environment" {
+  description = "The environment tag, e.g prod"
+}
+
 resource "aws_security_group" "main" {
   name        = "${var.name}-rds"
   description = "Allows traffic to RDS from other security groups"
@@ -115,6 +128,7 @@ resource "aws_security_group" "main" {
 
   tags {
     Name = "RDS (${var.name})"
+    Environment = "${var.environment}"
   }
 }
 
@@ -130,7 +144,7 @@ resource "aws_db_instance" "main" {
   # Database
   engine         = "${var.engine}"
   engine_version = "${var.engine_version}"
-  username       = "${var.name}"
+  username       = "${var.username}"
   password       = "${var.password}"
   multi_az       = "${var.multi_az}"
   name           = "${var.name}"
@@ -150,8 +164,31 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name   = "${aws_db_subnet_group.main.id}"
   vpc_security_group_ids = ["${aws_security_group.main.id}"]
   publicly_accessible    = "${var.publicly_accessible}"
+  skip_final_snapshot = "${var.skip_final_snapshot}"
+
+  tags {
+    Name        = "${var.name}"
+    Environment = "${var.environment}"
+  }
 }
 
 output "addr" {
   value = "postgres://${aws_db_instance.main.username}:${aws_db_instance.main.password}@${aws_db_instance.main.endpoint}"
+}
+
+output "endpoint" {
+  # The endpoint has the port, so we need to split the string and take the first element
+  value = "${element(split(":", aws_db_instance.main.endpoint), 0)}"
+}
+
+output "port" {
+  value = "${aws_db_instance.main.port}"
+}
+
+output "username" {
+  value = "${aws_db_instance.main.username}"
+}
+
+output "password" {
+  value = "${aws_db_instance.main.password}"
 }
