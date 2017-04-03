@@ -17,6 +17,7 @@ variable "port" {
   default     = 5432
 }
 
+<<<<<<< HEAD
 variable "database" {
   description = "The database name for the RDS instance (if not specified, `var.name` will be used)"
   default     = ""
@@ -25,6 +26,10 @@ variable "database" {
 variable "username" {
   description = "The username for the RDS instance (if not specified, `var.name` will be used)"
   default     = ""
+=======
+variable "username" {
+  description = "Postgres username"
+>>>>>>> Re-enable listener on 443.
 }
 
 variable "password" {
