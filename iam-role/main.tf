@@ -7,7 +7,7 @@ variable "environment" {
 }
 
 resource "aws_iam_role" "default_ecs_role" {
-  name = "ecs-role-${var.name}-${var.environment}"
+  name = "${var.name}-${var.environment}-ecs-role"
 
   assume_role_policy = <<EOF
 {
@@ -29,7 +29,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "default_ecs_service_role_policy" {
-  name = "ecs-service-role-policy-${var.name}-${var.environment}"
+  name = "${var.name}-${var.environment}-ecs-service-role-policy"
   role = "${aws_iam_role.default_ecs_role.id}"
 
   policy = <<EOF
@@ -55,7 +55,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "default_ecs_instance_role_policy" {
-  name = "ecs-instance-role-policy-${var.name}-${var.environment}"
+  name = "${var.name}-${var.environment}-ecs-instance-role-policy"
   role = "${aws_iam_role.default_ecs_role.id}"
 
   policy = <<EOF
@@ -97,7 +97,7 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "default_ecs" {
-  name  = "ecs-instance-profile-${var.name}-${var.environment}"
+  name  = "${var.name}-${var.environment}-ecs-instance-profile"
   path  = "/"
   roles = ["${aws_iam_role.default_ecs_role.name}"]
 }

@@ -82,7 +82,7 @@ variable "skip_final_snapshot" {
 }
 
 resource "aws_security_group" "main" {
-  name        = "${var.name}-rds-cluster"
+  name        = "${var.name}-${var.environment}-rds-cluster"
   description = "Allows traffic to rds from other security groups"
   vpc_id      = "${var.vpc_id}"
 
@@ -101,13 +101,13 @@ resource "aws_security_group" "main" {
   }
 
   tags {
-    Name        = "RDS cluster (${var.name})"
+    Name        = "RDS cluster (${var.name}-${var.environment})"
     Environment = "${var.environment}"
   }
 }
 
 resource "aws_db_subnet_group" "main" {
-  name        = "${var.name}"
+  name        = "${var.name}-${var.environment}"
   description = "RDS cluster subnet group"
   subnet_ids  = ["${var.subnet_ids}"]
 }
@@ -124,7 +124,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
 }
 
 resource "aws_rds_cluster" "main" {
-  cluster_identifier        = "${var.name}"
+  cluster_identifier        = "${var.name}-${var.environment}"
   availability_zones        = ["${var.availability_zones}"]
   database_name             = "${var.database_name}"
   master_username           = "${var.master_username}"
