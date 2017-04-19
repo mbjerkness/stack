@@ -68,7 +68,7 @@ resource "aws_instance" "bastion" {
   user_data              = "${file(format("%s/user_data.sh", path.module))}"
 
   tags {
-    Name        = "bastion"
+    Name        = "${format("%s-bastion", var.environment)}"
     Environment = "${var.environment}"
   }
 }

@@ -36,7 +36,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags {
-    Name        = "${var.name}"
+    Name        = "${var.name}-${var.environment}"
     Environment = "${var.environment}"
   }
 }
@@ -49,7 +49,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
-    Name        = "${var.name}"
+    Name        = "${var.name}-${var.environment}"
     Environment = "${var.environment}"
   }
 }
@@ -77,7 +77,7 @@ resource "aws_subnet" "internal" {
   count             = "${length(var.internal_subnets)}"
 
   tags {
-    Name        = "${var.name}-${format("internal-%03d", count.index+1)}"
+    Name = "${var.name}-${var.environment}-${format("internal-%03d", count.index+1)}"
     Environment = "${var.environment}"
   }
 }
@@ -90,7 +90,7 @@ resource "aws_subnet" "external" {
   map_public_ip_on_launch = true
 
   tags {
-    Name        = "${var.name}-${format("external-%03d", count.index+1)}"
+    Name        = "${var.name}-${var.environment}-${format("external-%03d", count.index+1)}"
     Environment = "${var.environment}"
   }
 }
@@ -103,7 +103,7 @@ resource "aws_route_table" "external" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
-    Name        = "${var.name}-external-001"
+    Name        = "${var.name}-${var.environment}-external-001"
     Environment = "${var.environment}"
   }
 }
@@ -119,7 +119,7 @@ resource "aws_route_table" "internal" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
-    Name        = "${var.name}-${format("internal-%03d", count.index+1)}"
+    Name        = "${var.name}-${var.environment}-${format("internal-%03d", count.index+1)}"
     Environment = "${var.environment}"
   }
 }
