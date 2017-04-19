@@ -1,6 +1,6 @@
 /**
  * The web-service is similar to the `service` module, but the
- * it provides a __public__ ALB instead.
+ * it provides a __public__ ELB instead.
  *
  * Usage:
  *
@@ -36,11 +36,15 @@ variable "version" {
 }
 
 variable "subnet_ids" {
-  description = "Comma separated list of subnet IDs that will be passed to the ALB module"
+  description = "Comma separated list of subnet IDs that will be passed to the ELB module"
 }
 
 variable "security_groups" {
-  description = "Comma separated list of security group IDs that will be passed to the ALB module"
+  description = "Comma separated list of security group IDs that will be passed to the ELB module"
+}
+
+variable "port" {
+  description = "The container host port"
 }
 
 variable "cluster" {
@@ -48,7 +52,7 @@ variable "cluster" {
 }
 
 variable "log_bucket" {
-  description = "The S3 bucket ID to use for the ALB"
+  description = "The S3 bucket ID to use for the ELB"
 }
 
 variable "ssl_certificate_id" {
@@ -60,12 +64,12 @@ variable "iam_role" {
 }
 
 variable "external_dns_name" {
-  description = "The subdomain under which the ALB is exposed externally, defaults to the task name"
+  description = "The subdomain under which the ELB is exposed externally, defaults to the task name"
   default     = ""
 }
 
 variable "internal_dns_name" {
-  description = "The subdomain under which the ALB is exposed internally, defaults to the task name"
+  description = "The subdomain under which the ELB is exposed internally, defaults to the task name"
   default     = ""
 }
 
@@ -89,16 +93,6 @@ variable "healthcheck" {
 variable "container_port" {
   description = "The container port"
   default     = 3000
-}
-
-variable "host_port" {
-  description = "The host port"
-  default = 0
-}
-
-variable "entry_point" {
-  description = "The docker container entry point"
-  default     = "[]"
 }
 
 variable "command" {
@@ -126,11 +120,6 @@ variable "cpu" {
   default     = 512
 }
 
-variable "working_directory" {
-  description = "The working directory of the container process"
-  default     = "/"
-}
-
 variable "deployment_minimum_healthy_percent" {
   description = "lower limit (% of desired_count) of # of running tasks during a deployment"
   default     = 100
@@ -139,10 +128,6 @@ variable "deployment_minimum_healthy_percent" {
 variable "deployment_maximum_percent" {
   description = "upper limit (% of desired_count) of # of running tasks during a deployment"
   default     = 200
-}
-
-variable "vpc_id" {
-  description = "The id of the VPC."
 }
 
 /**
@@ -159,9 +144,9 @@ resource "aws_ecs_service" "main" {
   deployment_maximum_percent         = "${var.deployment_maximum_percent}"
 
   load_balancer {
-    target_group_arn = "${module.alb.target_group}"
-    container_name   = "${module.task.name}"
-    container_port   = "${var.container_port}"
+    elb_name       = "${module.elb.id}"
+    container_name = "${module.task.name}"
+    container_port = "${var.container_port}"
   }
 
   lifecycle {
@@ -172,35 +157,29 @@ resource "aws_ecs_service" "main" {
 module "task" {
   source = "../task"
 
-  name              = "${coalesce(var.name, replace(var.image, "/", "-"))}"
-  image             = "${var.image}"
-  image_version     = "${var.version}"
-  command           = "${var.command}"
-  env_vars          = "${var.env_vars}"
-  memory            = "${var.memory}"
-  cpu               = "${var.cpu}"
+  name          = "${coalesce(var.name, replace(var.image, "/", "-"))}"
+  image         = "${var.image}"
+  image_version = "${var.version}"
+  command       = "${var.command}"
+  env_vars      = "${var.env_vars}"
+  memory        = "${var.memory}"
+  cpu           = "${var.cpu}"
 
-
-  /* If your task's container definition specifies port 80 for an NGINX container port,
-     and port 0 for the host port, then the host port is dynamically chosen from the
-     ephemeral port range of the container instance
-     (such as 32768 to 61000 on the latest Amazon ECS-optimized AMI).
-  */
   ports = <<EOF
   [
     {
       "containerPort": ${var.container_port},
-      "hostPort": ${var.host_port}
+      "hostPort": ${var.port}
     }
   ]
 EOF
 }
 
-module "alb" {
-  source = "./alb"
+module "elb" {
+  source = "./elb"
 
   name               = "${module.task.name}"
-  port               = "${var.container_port}"
+  port               = "${var.port}"
   environment        = "${var.environment}"
   subnet_ids         = "${var.subnet_ids}"
   external_dns_name  = "${coalesce(var.external_dns_name, module.task.name)}"
@@ -211,40 +190,39 @@ module "alb" {
   security_groups    = "${var.security_groups}"
   log_bucket         = "${var.log_bucket}"
   ssl_certificate_id = "${var.ssl_certificate_id}"
-  vpc_id             = "${var.vpc_id}"
 }
 
 /**
  * Outputs.
  */
 
-// The name of the ALB
+// The name of the ELB
 output "name" {
-  value = "${module.alb.name}"
+  value = "${module.elb.name}"
 }
 
-// The DNS name of the ALB
+// The DNS name of the ELB
 output "dns" {
-  value = "${module.alb.dns}"
+  value = "${module.elb.dns}"
 }
 
-// The id of the ALB
-output "alb" {
-  value = "${module.alb.id}"
+// The id of the ELB
+output "elb" {
+  value = "${module.elb.id}"
 }
 
-// The zone id of the ALB
+// The zone id of the ELB
 output "zone_id" {
-  value = "${module.alb.zone_id}"
+  value = "${module.elb.zone_id}"
 }
 
 // FQDN built using the zone domain and name (external)
 output "external_fqdn" {
-  value = "${module.alb.external_fqdn}"
+  value = "${module.elb.external_fqdn}"
 }
 
 // FQDN built using the zone domain and name (internal)
 output "internal_fqdn" {
-  value = "${module.alb.internal_fqdn}"
+  value = "${module.elb.internal_fqdn}"
 }
 
