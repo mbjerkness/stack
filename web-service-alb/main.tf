@@ -91,7 +91,7 @@ variable "container_port" {
   default     = 3000
 }
 
-variable "host_port" {
+variable "port" {
   description = "The host port"
   default = 0
 }
@@ -185,7 +185,7 @@ module "task" {
   [
     {
       "containerPort": ${var.container_port},
-      "hostPort": ${var.host_port}
+      "hostPort": ${var.port}
     }
   ]
 EOF
