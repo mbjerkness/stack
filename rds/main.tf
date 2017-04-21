@@ -107,6 +107,11 @@ variable "skip_final_snapshot" {
   default     = false
 }
 
+variable "snapshot_identifier" {
+  description = "If true, when destroying the RDS instance it will skip the final snapshot"
+  default     = ""
+}
+
 variable "environment" {
   description = "The environment tag, e.g prod"
 }
@@ -177,6 +182,8 @@ resource "aws_db_instance" "main" {
   vpc_security_group_ids = ["${aws_security_group.main.id}"]
   publicly_accessible    = "${var.publicly_accessible}"
   skip_final_snapshot = "${var.skip_final_snapshot}"
+
+  snapshot_identifier = "${var.snapshot_identifier}"
 
   tags {
     Name        = "${var.name}"
