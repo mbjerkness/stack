@@ -48,6 +48,20 @@ resource "aws_iam_role_policy" "default_ecs_service_role_policy" {
         "elasticloadbalancing:DeregisterTargets"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:Query"
+      ],
+      "Resource": "arn:aws:dynamodb:us-east-1:260409146730:table/credential-store"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "arn:aws:kms:us-east-1:260409146730:key/fe39d852-ea65-4823-a3b1-f50b5f513e03"
     }
   ]
 }
@@ -99,7 +113,7 @@ EOF
 resource "aws_iam_instance_profile" "default_ecs" {
   name  = "${var.name}-${var.environment}-ecs-instance-profile"
   path  = "/"
-  roles = ["${aws_iam_role.default_ecs_role.name}"]
+  role = "${aws_iam_role.default_ecs_role.name}"
 }
 
 output "default_ecs_role_id" {
