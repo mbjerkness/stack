@@ -27,7 +27,7 @@ variable "cidr" {
 # Could also figure out how to use the Amazon ECS Optimized AMI, but need to figure out logging...
 variable "default_ecs_ami" {
   default = {
-    us-east-1      = "ami-dde4e6ca"
+    us-east-1      = "ami-1dbfed66"
     us-west-1      = "ami-6d21770d"
     us-west-2      = "ami-97da70f7"
     eu-west-1      = "ami-c41f3bb7"
