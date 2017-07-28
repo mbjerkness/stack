@@ -249,3 +249,7 @@ output "external_fqdn" {
 output "internal_fqdn" {
   value = "${module.alb.internal_fqdn}"
 }
+
+output "task_definition_revision" {
+  value = "${module.task.revision}"
+}
