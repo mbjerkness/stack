@@ -37,12 +37,12 @@ variable "backup_retention_period" {
 
 variable "backup_window" {
   description = "Time window for backups."
-  default     = "00:00-01:00"
+  default     = "05:00-06:00"
 }
 
 variable "maintenance_window" {
   description = "Time window for maintenance."
-  default     = "Mon:01:00-Mon:02:00"
+  default     = "Mon:06:00-Mon:07:00"
 }
 
 variable "apply_immediately" {

@@ -154,7 +154,6 @@ resource "aws_ecs_service" "main" {
   deployment_maximum_percent         = "${var.deployment_maximum_percent}"
 
   task_definition = "${module.task.name}:${max("${module.task.revision}", "${data.aws_ecs_task_definition.task.revision}")}"
-  # task_definition = "${var.task_definition}"
 
   load_balancer {
     target_group_arn = "${module.alb.target_group}"
@@ -181,7 +180,6 @@ module "task" {
   env_vars          = "${var.env_vars}"
   memory            = "${var.memory}"
   cpu               = "${var.cpu}"
-  //working_directory = "${var.working_directory}"
 
   /* If your task's container definition specifies port 80 for an NGINX container port,
      and port 0 for the host port, then the host port is dynamically chosen from the
