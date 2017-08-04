@@ -153,6 +153,8 @@ resource "aws_ecs_service" "main" {
   deployment_minimum_healthy_percent = "${var.deployment_minimum_healthy_percent}"
   deployment_maximum_percent         = "${var.deployment_maximum_percent}"
 
+  task_definition = "${module.task.name}:${max("${module.task.revision}", "${data.aws_ecs_task_definition.task.revision}")}"
+
   load_balancer {
     target_group_arn = "${module.alb.target_group}"
     container_name   = "${module.task.name}"
@@ -162,6 +164,10 @@ resource "aws_ecs_service" "main" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+data "aws_ecs_task_definition" "task" {
+  task_definition = "${module.task.name}"
 }
 
 module "task" {
@@ -174,7 +180,6 @@ module "task" {
   env_vars          = "${var.env_vars}"
   memory            = "${var.memory}"
   cpu               = "${var.cpu}"
-  //working_directory = "${var.working_directory}"
 
   /* If your task's container definition specifies port 80 for an NGINX container port,
      and port 0 for the host port, then the host port is dynamically chosen from the
@@ -241,4 +246,8 @@ output "external_fqdn" {
 // FQDN built using the zone domain and name (internal)
 output "internal_fqdn" {
   value = "${module.alb.internal_fqdn}"
+}
+
+output "task_definition_revision" {
+  value = "${module.task.revision}"
 }

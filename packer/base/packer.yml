@@ -8,6 +8,8 @@ ami:
   ssh_timeout: 10m
   enhanced_networking: True
   associate_public_ip_address: True
+  subnet_id: subnet-18d73a34
+  security_group_id: sg-ab577ed4
 
 scripts:
   - base.sh

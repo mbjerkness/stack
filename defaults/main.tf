@@ -22,12 +22,12 @@ variable "cidr" {
   description = "The CIDR block to provision for the VPC"
 }
 
-# Want to use new ones...but alas.
-# Need to figure out how to build a new AMI with the updated ECS agent with packer
-# Could also figure out how to use the Amazon ECS Optimized AMI, but need to figure out logging...
+# us-east-1 ami is a new AMI built by centriam using packer.
+# We are not running in any other region, so we will need to update other
+# region's AMIs if we move into them.
 variable "default_ecs_ami" {
   default = {
-    us-east-1      = "ami-dde4e6ca"
+    us-east-1      = "ami-1dbfed66"
     us-west-1      = "ami-6d21770d"
     us-west-2      = "ami-97da70f7"
     eu-west-1      = "ami-c41f3bb7"
