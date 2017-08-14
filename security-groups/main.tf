@@ -19,7 +19,7 @@ variable "cidr" {
 }
 
 resource "aws_security_group" "internal_elb" {
-  name        = "${format("%s-%s-internal-elb", var.name, var.environment)}"
+  name        = "${format("%s-internal-elb", var.name)}"
   vpc_id      = "${var.vpc_id}"
   description = "Allows internal ELB traffic"
 
@@ -42,13 +42,13 @@ resource "aws_security_group" "internal_elb" {
   }
 
   tags {
-    Name        = "${format("%s %s internal elb", var.name, var.environment)}"
+    Name        = "${format("%s internal elb", var.name)}"
     Environment = "${var.environment}"
   }
 }
 
 resource "aws_security_group" "external_elb" {
-  name        = "${format("%s-%s-external-elb", var.name, var.environment)}"
+  name        = "${format("%s-external-elb", var.name)}"
   vpc_id      = "${var.vpc_id}"
   description = "Allows external ELB traffic"
 
@@ -78,13 +78,13 @@ resource "aws_security_group" "external_elb" {
   }
 
   tags {
-    Name        = "${format("%s %s external elb", var.name, var.environment)}"
+    Name        = "${format("%s external elb", var.name)}"
     Environment = "${var.environment}"
   }
 }
 
 resource "aws_security_group" "external_ssh" {
-  name        = "${format("%s-%s-external-ssh", var.name, var.environment)}"
+  name        = "${format("%s-external-ssh", var.name)}"
   description = "Allows ssh from the world"
   vpc_id      = "${var.vpc_id}"
 
@@ -107,13 +107,13 @@ resource "aws_security_group" "external_ssh" {
   }
 
   tags {
-    Name        = "${format("%s %s external ssh", var.name, var.environment)}"
+    Name        = "${format("%s external ssh", var.name)}"
     Environment = "${var.environment}"
   }
 }
 
 resource "aws_security_group" "internal_ssh" {
-  name        = "${format("%s-%s-internal-ssh", var.name, var.environment)}"
+  name        = "${format("%s-internal-ssh", var.name)}"
   description = "Allows ssh from bastion"
   vpc_id      = "${var.vpc_id}"
 
@@ -136,7 +136,7 @@ resource "aws_security_group" "internal_ssh" {
   }
 
   tags {
-    Name        = "${format("%s %s internal ssh", var.name, var.environment)}"
+    Name        = "${format("%s internal ssh", var.name)}"
     Environment = "${var.environment}"
   }
 }

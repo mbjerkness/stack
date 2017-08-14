@@ -11,16 +11,16 @@ data "template_file" "policy" {
   template = "${file("${path.module}/policy.json")}"
 
   vars = {
-    bucket     = "${var.name}-${var.environment}-logs"
+    bucket     = "${var.name}-logs"
     account_id = "${var.account_id}"
   }
 }
 
 resource "aws_s3_bucket" "logs" {
-  bucket = "${var.name}-${var.environment}-logs"
+  bucket = "${var.name}-logs"
 
   tags {
-    Name        = "${var.name}-${var.environment}-logs"
+    Name        = "${var.name}-logs"
     Environment = "${var.environment}"
   }
 
