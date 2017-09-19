@@ -142,6 +142,10 @@ variable "extra_cloud_config_content" {
   default     = ""
 }
 
+variable "log_bucket_name" {
+  description = "Name of the bucket to store logs"
+}
+
 module "defaults" {
   source = "./defaults"
   region = "${var.region}"
@@ -223,7 +227,7 @@ module "ecs_cluster" {
 
 module "s3_logs" {
   source      = "./s3-logs"
-  name        = "${var.name}"
+  name        = "${var.log_bucket_name}"
   environment = "${var.environment}"
   account_id  = "${module.defaults.s3_logs_account_id}"
 }
