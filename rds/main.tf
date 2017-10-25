@@ -2,6 +2,10 @@ variable "name" {
   description = "RDS name and Postgres username"
 }
 
+variable "database_name" {
+  description = "The database name, this is different than the instance name"
+}
+
 variable "engine" {
   description = "Database engine: mysql, postgres, etc."
   default     = "postgres"
@@ -158,7 +162,7 @@ resource "aws_db_instance" "main" {
   username       = "${var.username}"
   password       = "${var.password}"
   multi_az       = "${var.multi_az}"
-  name           = "${var.name}"
+  name           = "${var.database_name}"
 
   # Backups / maintenance
   backup_retention_period = "${var.backup_retention_period}"
@@ -183,6 +187,12 @@ resource "aws_db_instance" "main" {
   tags {
     Name        = "${var.name}"
     Environment = "${var.environment}"
+  }
+
+  timeouts {
+    create = "3h"
+    update = "3h"
+    delete = "3h"
   }
 }
 

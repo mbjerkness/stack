@@ -30,6 +30,11 @@ variable "name" {
   default     = ""
 }
 
+variable "alb_name" {
+  description = "The alb name, if empty the alb name is defaulted to the image name"
+  default     = ""
+}
+
 variable "version" {
   description = "The docker image version"
   default     = "latest"
@@ -199,7 +204,7 @@ EOF
 module "alb" {
   source = "./alb"
 
-  name               = "${module.task.name}"
+  name               = "${coalesce(var.alb_name, module.task.name)}"
   port               = "${var.container_port}"
   environment        = "${var.environment}"
   subnet_ids         = "${var.subnet_ids}"

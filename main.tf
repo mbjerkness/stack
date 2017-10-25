@@ -68,6 +68,11 @@ variable "bastion_instance_type" {
   default = "t2.micro"
 }
 
+variable "bastion_security_groups" {
+  description = "Security groups for the bastion"
+  type = "string"
+}
+
 variable "ecs_cluster_name" {
   description = "the name of the cluster, if not specified the variable name will be used"
   default = ""
@@ -174,7 +179,7 @@ module "bastion" {
   source          = "./bastion"
   region          = "${var.region}"
   instance_type   = "${var.bastion_instance_type}"
-  security_groups = "${module.security_groups.external_ssh},${module.security_groups.internal_ssh}"
+  security_groups = "${module.security_groups.external_ssh},${module.security_groups.internal_ssh},${var.bastion_security_groups}"
   vpc_id          = "${module.vpc.id}"
   subnet_id       = "${element(module.vpc.external_subnets, 0)}"
   key_name        = "${var.key_name}"
