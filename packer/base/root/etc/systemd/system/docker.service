@@ -5,9 +5,9 @@ After=network.target docker.socket bootstrap.service
 Requires=docker.socket bootstrap.service
 
 [Service]
-EnvironmentFile=-/etc/default/docker
+EnvironmentFile=-/etc/default/docker-cntrm
 Type=notify
-ExecStart=/usr/bin/docker daemon -H fd:// $DOCKER_OPTS
+ExecStart=/usr/bin/dockerd -H fd:// $DOCKER_OPTS
 ExecReload=/bin/kill -s HUP $MAINPID
 MountFlags=slave
 LimitNOFILE=1048576

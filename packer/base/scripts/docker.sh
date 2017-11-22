@@ -1,16 +1,36 @@
 #!/bin/bash
 set -e
 
-apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-echo 'deb https://apt.dockerproject.org/repo ubuntu-xenial main' > /etc/apt/sources.list.d/docker.list
+rm -f /etc/init.d/docker
+rm -f /etc/rc*/*docker
 
+# Update the apt package index
 apt-get update -y
-apt-get purge -y lxc-docker
-apt-cache policy docker-engine
 
-apt-get install -o Dpkg::Options::="--force-confold" -y \
-        linux-image-extra-$(uname -r) \
-        docker-engine
+# Purge any existing
+apt-get remove -y docker docker-engine docker.io
+
+# Install packages to allow apt to use a repository over HTTPS
+apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+# Setup the stable docker repository
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+# Update the apt package index to reflect the addition of the docker repository
+apt-get update -y
+
+# Install Docker 17.09.0
+apt-get install -y docker-ce=17.09.0~ce-0~ubuntu
 
 gpasswd -a ubuntu docker
 

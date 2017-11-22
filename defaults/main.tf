@@ -26,8 +26,9 @@ variable "cidr" {
 # We are not running in any other region, so we will need to update other
 # region's AMIs if we move into them.
 variable "default_ecs_ami" {
+  type = "map"
   default = {
-    us-east-1      = "ami-ced45eb4"
+    us-east-1      = "ami-87800afd"
     us-west-1      = "ami-6d21770d"
     us-west-2      = "ami-97da70f7"
     eu-west-1      = "ami-c41f3bb7"
@@ -42,6 +43,7 @@ variable "default_ecs_ami" {
 
 # http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/enable-access-logs.html#attach-bucket-policy
 variable "default_log_account_ids" {
+  type = "map"
   default = {
     us-east-1      = "127311923021"
     us-west-2      = "797873946194"
