@@ -6,3 +6,5 @@ example/keys
 *~
 .idea/
 stack.iml
+
+.python-version
