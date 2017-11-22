@@ -37,7 +37,7 @@ install-tools: $(tools)
 	install -S -m 0755 $< /usr/local/bin
 
 amis:
-	pack-ami build -p ./packer -t base -r
+	export PACKER_LOG=1 && pack-ami build -p ./packer -t base -r
 
 plan-ami:
 	pack-ami plan -p ./packer -t ${template}
@@ -47,6 +47,9 @@ validate-ami:
 
 build-ami:
 	pack-ami build -p ./packer -t ${template}
+
+packer-fix:
+	packer fix -p ./packer ${template}
 
 test:
 	@bash scripts/test.sh

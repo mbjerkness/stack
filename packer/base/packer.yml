@@ -6,10 +6,11 @@ ami:
   instance_type: c4.2xlarge
   ssh_username: ubuntu
   ssh_timeout: 10m
-  enhanced_networking: True
+  ena_support: True
+  ssh_private_ip: True
   associate_public_ip_address: True
-  subnet_id: subnet-18d73a34
-  security_group_id: sg-ab577ed4
+  subnet_id: subnet-4cfb7f28
+  security_group_id: sg-abef6cd9
 
 scripts:
   - base.sh
