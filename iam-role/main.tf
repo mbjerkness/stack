@@ -52,14 +52,18 @@ resource "aws_iam_role_policy" "default_ecs_service_role_policy" {
     {
       "Effect": "Allow",
       "Action": [
-        "dynamodb:Query"
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:PutItem"
       ],
       "Resource": "arn:aws:dynamodb:us-east-1:260409146730:table/credential-store"
     },
     {
       "Effect": "Allow",
       "Action": [
-        "kms:Decrypt"
+        "kms:Decrypt",
+        "kms:GenerateDataKey"
       ],
       "Resource": "arn:aws:kms:us-east-1:260409146730:key/fe39d852-ea65-4823-a3b1-f50b5f513e03"
     }
