@@ -78,6 +78,12 @@ variable "vpc_id" {
   description = "The VPC ID to use"
 }
 
+variable "additional_security_groups" {
+  description = "A list of additional security group IDs to add the RDS to"
+  type        = "list"
+  default     = []
+}
+
 variable "ingress_allow_security_groups" {
   description = "A list of security group IDs to allow traffic from"
   type        = "list"
@@ -177,7 +183,7 @@ resource "aws_db_instance" "main" {
 
   # Network / security
   db_subnet_group_name      = "${aws_db_subnet_group.main.id}"
-  vpc_security_group_ids    = ["${aws_security_group.main.id}"]
+  vpc_security_group_ids    = ["${aws_security_group.main.id}", "${var.additional_security_groups}"]
   publicly_accessible       = "${var.publicly_accessible}"
   skip_final_snapshot       = "${var.skip_final_snapshot}"
   final_snapshot_identifier = "${var.final_snapshot_id}"
