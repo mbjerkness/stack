@@ -7,7 +7,7 @@ ami:
   ssh_username: ubuntu
   ssh_timeout: 10m
   ena_support: True
-  ssh_private_ip: True
+  ssh_interface: private_ip
   associate_public_ip_address: True
   subnet_id: subnet-4cfb7f28
   security_group_id: sg-abef6cd9
@@ -17,5 +17,6 @@ scripts:
   - ixgbevf.sh
   - bootstrap.sh
   - docker.sh
+  - jumpcloud.sh
 
 execute: "echo ubuntu | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
