@@ -57,7 +57,10 @@ resource "aws_iam_role_policy" "default_ecs_service_role_policy" {
         "dynamodb:Scan",
         "dynamodb:PutItem"
       ],
-      "Resource": "arn:aws:dynamodb:us-east-1:260409146730:table/credential-store"
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:260409146730:table/credential-store",
+        "arn:aws:dynamodb:us-east-1:260409146730:table/cwc"
+      ]
     },
     {
       "Effect": "Allow",

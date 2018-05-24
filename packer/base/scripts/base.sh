@@ -38,5 +38,6 @@ apt-get install -y \
         dhcpdump
 
 pip install awscli
+pip install credstash
 
 apt-get dist-upgrade -y

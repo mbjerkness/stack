@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-curl --silent --show-error --header 'x-connect-key: 742502a44e0afaace6bfd914f824fd2d9d7a10cd' https://kickstart.jumpcloud.com/Kickstart | sudo bash
+connect_key=$(credstash -r us-east-1 get jumpcloud.connect_key)
+curl --silent --show-error --header "x-connect-key: $connect_key" https://kickstart.jumpcloud.com/Kickstart | sudo bash
 sleep 5
 sudo service jcagent stop
 sleep 5

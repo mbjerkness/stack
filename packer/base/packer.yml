@@ -11,6 +11,7 @@ ami:
   associate_public_ip_address: True
   subnet_id: subnet-4cfb7f28
   security_group_id: sg-abef6cd9
+  iam_instance_profile: PackerRole
 
 scripts:
   - base.sh
@@ -18,5 +19,5 @@ scripts:
   - bootstrap.sh
   - docker.sh
   - jumpcloud.sh
-
+  - sumologic.sh
 execute: "echo ubuntu | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
