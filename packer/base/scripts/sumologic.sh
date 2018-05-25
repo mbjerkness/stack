@@ -11,5 +11,6 @@ access_key=$(credstash -r us-east-1 get sumologic.access_key)
 sudo ./SumoCollector.sh -q \
     -VskipRegistration=true \
     -Vephemeral=true \
+    -Vsources=/etc/sumologic/sources.json \
     -Vsumo.accessid=$access_id \
     -Vsumo.accesskey=$access_key
