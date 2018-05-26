@@ -1,0 +1,22 @@
+{
+  "api.version":"v1",
+  "source":{
+    "name":"Dev Source",
+    "description":"Development cluster source",
+    "category":"dev/cluster",
+    "hostName":"dev_cluster",
+    "automaticDateParsing":true,
+    "multilineProcessingEnabled":true,
+    "useAutolineMatching":true,
+    "forceTimeZone":false,
+    "filters":[],
+    "cutoffTimestamp":0,
+    "encoding":"UTF-8",
+    "allContainers":true,
+    "collectEvents":true,
+    "certPath":"",
+    "uri":"unix:///var/run/docker.sock",
+    "specifiedContainers":[],
+    "sourceType":"DockerLog"
+  }
+}
