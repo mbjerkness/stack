@@ -28,7 +28,7 @@ variable "cidr" {
 variable "default_ecs_ami" {
   type = "map"
   default = {
-    us-east-1      = "ami-dba6c7a4"
+    us-east-1      = "ami-2a315255"
     us-west-1      = "ami-6d21770d"
     us-west-2      = "ami-97da70f7"
     eu-west-1      = "ami-c41f3bb7"
